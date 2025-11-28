@@ -10,13 +10,23 @@ fn main() {
         io::stdout().flush().unwrap();
         // thread::sleep(Duration::from_secs(3));
 
-        let mut command = String::new();
-        io::stdin().read_line(&mut command).unwrap();
-        if command.trim() == "exit" {
-            break;
-        }
-        else {
-            println!("{}: command not found", command.trim());
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+
+        let parts: Vec<&str> = input.trim().split_whitespace().collect();
+        let command = parts[0];
+        let args = &parts[1..];
+
+        match command {
+            "exit" => {
+                break;
+            },
+            "echo" => {
+                println!("{}", args.join(" "));
+            },
+            _ => {
+                println!("{}: command not found", input.trim());
+            }
         }
     }
 }
