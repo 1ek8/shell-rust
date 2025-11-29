@@ -3,13 +3,13 @@ use std::io::{self, Write};
 use std::env;
 use std::os::unix::fs::PermissionsExt;
 use std::path::PathBuf;
+use std::process::Command;
 // use std::thread;
 // use std::time::Duration;
 
 const BUILT_INS: [&str;3] = ["exit", "echo", "type"];
 
 fn main() {
-    // TODO: Uncomment the code below to pass the first stage
     loop {
         
         print!("$ ");
@@ -28,7 +28,14 @@ fn main() {
             "type" => cmd_type_handler(&args), 
             "exit" => break,
             "echo" => println!("{}", &args.join(" ")),
-            _ => println!("{}: command not found", input.trim())
+            _ => {
+                let output = Command::new(command).
+                                                        args(args)
+                                                        .status(); 
+                if output.is_err(){
+                    println!("{}: command not found", input.trim()) 
+                }
+            }
         }
     }
 }
