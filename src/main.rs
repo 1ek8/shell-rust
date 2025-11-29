@@ -7,7 +7,7 @@ use std::process::Command;
 // use std::thread;
 // use std::time::Duration;
 
-const BUILT_INS: [&str;4] = ["exit", "echo", "type", "pwd"];
+const BUILT_INS: [&str;5] = ["exit", "echo", "type", "pwd", "cd"];
 
 fn main() {
     loop {
@@ -32,6 +32,13 @@ fn main() {
                 match env::current_dir() {
                     Ok(path) => println!("{}", path.display()),
                     Err(e) => eprintln!("Error retrieving current directory: {}", e)
+                }
+            },
+            "cd" => {
+                if let Some(path) = args.get(0) {
+                    if std::env::set_current_dir(path).is_err() {
+                        println!("cd: {}: No such file or directory", path);
+                    }
                 }
             },
             _ => {
