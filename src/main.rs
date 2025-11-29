@@ -7,7 +7,7 @@ use std::process::Command;
 // use std::thread;
 // use std::time::Duration;
 
-const BUILT_INS: [&str;3] = ["exit", "echo", "type"];
+const BUILT_INS: [&str;4] = ["exit", "echo", "type", "pwd"];
 
 fn main() {
     loop {
@@ -28,7 +28,14 @@ fn main() {
             "type" => cmd_type_handler(&args), 
             "exit" => break,
             "echo" => println!("{}", &args.join(" ")),
+            "pwd" => {
+                match env::current_dir() {
+                    Ok(path) => println!("{}", path.display()),
+                    Err(e) => eprintln!("Error retrieving current directory: {}", e)
+                }
+            },
             _ => {
+                println!("Other:");
                 let output = Command::new(command).
                                                         args(args)
                                                         .status(); 
