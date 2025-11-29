@@ -35,7 +35,7 @@ fn main() {
                 }
             },
             _ => {
-                println!("Other:");
+                // println!("Other:");
                 let output = Command::new(command).
                                                         args(args)
                                                         .status(); 
